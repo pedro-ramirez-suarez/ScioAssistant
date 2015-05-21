@@ -55,7 +55,7 @@
                 }
                 if (interim_transcript != '') {
                     $('#query').val(interim_transcript);
-                    final_transcript = interim_transcript;
+                    //final_transcript = interim_transcript;
                 }
             }
             recognition.start();
@@ -66,6 +66,7 @@
             $('#query').val(final_transcript);
             $('#micro').removeClass('recording');
             $('.startSpeak').show();
+            goSearch();
         }
 
         function goSearch() {
@@ -77,6 +78,15 @@
                     $('#results').html('');
                     $('#results').append('<h2>This is what I found</h2>');
                     var item = '';
+                    console.log(jsonData.length);
+                    if (jsonData.length == 0)
+                    {
+                        $('#results').append('<h2><label class="label label-info">La búsqueda no produjo resultados</label><h2>');
+                        return;
+                    } else if (jsonData[0].error != undefined && jsonData[0].error != null) {
+                        $('#results').append('<h1><label class="label label-danger">' + jsonData[0].error + '</label><h1>');
+                        return;
+                    }
                     for (var x in jsonData) {
                         var i = jsonData[x];
                         var names = Object.keys(i)
@@ -84,7 +94,7 @@
                         for (var j in names) {
                             if (names[j] == 'ID' || names[j] == 'id' || names[j] == 'Id')
                                 continue;
-                            item += '<p><b>' + names[j] + '</b> ' + i[names[j]] + '</p>';
+                            item += '<p><h4 class="label label-default">' + names[j] + '</h4> ' + i[names[j]] + '</p>';
                         }
                         item += '</div></div>';
                         $('#results').append(item);

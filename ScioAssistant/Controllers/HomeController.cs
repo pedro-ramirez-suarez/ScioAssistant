@@ -29,11 +29,23 @@ namespace ScioAssistant.Controllers
             ParseTree tree;
             Parser parser = new Parser(lang);
             tree = parser.Parse(query);
-
+            if (tree.Root == null || tree.Root.ChildNodes[0] == null)
+            {
+                //add single quotes in last word and try again
+                var words = query.Split(new char[] {' '});
+                words[words.Length - 1] = "'" + words[words.Length - 1] + "'";
+                query = string.Join(" ", words);
+                //if is still null, send a custom message
+                tree = parser.Parse(query);
+                if (tree.Root == null || tree.Root.ChildNodes[0] == null)
+                {
+                    return Content(JsonConvert.SerializeObject(new List<object> () {new { error = "Lo siento, no puedo entenderte, intenta de nuevo" }}));
+                }
+            }
             var execute = lang.QueryStatement(tree.Root.ChildNodes[0]);
             var db = new CustomSearch.data.DataAccess("default");
             var result = db.ExecuteSearch(execute.Item1, execute.Item2, execute.Item3);
-
+            //Check if result returned something, if not, send custom msg
             return Content(JsonConvert.SerializeObject(result));
         }
     }
