@@ -27,6 +27,9 @@ namespace SearchLang
             var de = ToTerm("de");
             var mas = ToTerm("mas");
             var menos = ToTerm("menos");
+            var mayor = ToTerm("mayor");
+            var menor = ToTerm("menor");
+
             var number = new NumberLiteral("number");
             var string_literal = new StringLiteral("string", "'", StringOptions.AllowsDoubledQuote);
 
@@ -34,6 +37,9 @@ namespace SearchLang
             var cuantosStatement = new NonTerminal("cuantosStatement");
             var queStatement = new NonTerminal("queStatement");
             var cuandoStatement = new NonTerminal("cuandoStatement");
+            var queMayorMenorStatement = new NonTerminal("queMayorMenorStatement");
+            var queMasMenosStatement = new NonTerminal("queMasMenosStatement");
+
             var tabla = new NonTerminal("tabla");
             var tabla2 = new NonTerminal("tabla2");
             
@@ -43,24 +49,34 @@ namespace SearchLang
             var whereId = new NonTerminal("whereId");
             var antesdespues = new NonTerminal("antesdespues");
             var cuantoscuantas = new NonTerminal("cuantoscuantas");
+            var mayormenor = new NonTerminal("mayormenor");
+            var masmenos = new NonTerminal("masmenos");
+
             var Id_simple = TerminalFactory.CreateSqlExtIdentifier(this, "id_simple"); //covers normal identifiers (abc) and quoted id's ([abc d], "abc d")
             id.Rule = Id_simple;
             tabla.Rule = id;
             tabla2.Rule = id;
             antesdespues.Rule = (antes | despues);
             cuantoscuantas.Rule = cuantos | cuantas;
+            mayormenor.Rule = mayor | menor;
+            masmenos.Rule = mas | menos;
+
             campo.Rule = id;
             whereId.Rule = string_literal | number;
             //Cuanto pregunta
             cuantosStatement.Rule = (cuantoscuantas + tabla + tiene + tabla2 + whereId) | (en + cuantoscuantas + tabla + esta + tabla2 + whereId);
             
             //que pregunta
-            queStatement.Rule = (que + campo + tiene + tabla + whereId) | (que + tabla + campo + antesdespues + de +whereId );// | (que + tabla + tiene );
+            queStatement.Rule = (que + campo + tiene + tabla + whereId) | (que + tabla + campo + antesdespues + de +whereId );
+            //que Mayor menor pregunta
+            queMayorMenorStatement.Rule = que | tabla | tiene | mayormenor | campo;            
+            //que menos mas pregunta
+            queMasMenosStatement.Rule = que | tabla | tiene | masmenos | tabla2;
 
             //cuando preguta
             cuandoStatement.Rule = cuando + campo + tabla + whereId;
 
-            comando.Rule = cuantosStatement | queStatement | cuandoStatement;
+            comando.Rule = cuantosStatement | queStatement | cuandoStatement | queMasMenosStatement | queMayorMenorStatement;
             this.Root = comando;
         }
 
@@ -79,6 +95,10 @@ namespace SearchLang
                         return Cuando(node);
                     case "cuantosStatement":
                         return Cuantos(node);
+                    case "queMayorMenorStatement":
+                        return QueMayorMenor(node);
+                    case "queMasMenosStatement":
+                        return QueMasMenos(node);
                     default :
                         return new Tuple<string, string, Dictionary<string, object>>(string.Empty, string.Empty, new Dictionary<string, object>());
                 }
@@ -114,6 +134,35 @@ namespace SearchLang
                 return new Tuple<string, string, Dictionary<string, object>>(string.Empty, string.Empty, new Dictionary<string, object>());
         }
 
+        private Tuple<string, string, Dictionary<string, object>> QueMayorMenor(ParseTreeNode node)
+        {
+            var campo = GetValueForTerm("campo", node);
+            var tabla = GetValueForTerm("tabla", node);
+            var cantidad = GetValueForTerm("mayormenor", node);
+            return new Tuple<string, string, Dictionary<string, object>>
+                (string.Format("SELECT top 1 [default],{0} FROM {1} order by {2} {3}",campo,tabla,campo,cantidad =="mayor" ? "DESC" : "ASC"),
+                tabla ,
+                new Dictionary<string, object> { });
+            
+        }
+
+
+        private Tuple<string, string, Dictionary<string, object>> QueMasMenos(ParseTreeNode node)
+        {
+            var campo = GetValueForTerm("campo", node);
+            var tabla = GetValueForTerm("tabla", node);
+            var tabla2 = GetValueForTerm("tabla2", node);
+            tabla2 = tabla.EndsWith("es") ? tabla.Remove(tabla.Length - 2) : tabla;
+            tabla2 = tabla.EndsWith("s") ? tabla.Remove(tabla.Length - 1) : tabla;
+
+            var cantidad = GetValueForTerm("masmenos", node);
+            
+            return new Tuple<string, string, Dictionary<string, object>>
+                (string.Format("SELECT {0}Id as [default],count({1}Id) as Total from {2} GROUP BY {0}Id",tabla,tabla2,tabla+ tabla2),
+                tabla + tabla2,
+                new Dictionary<string, object> { });
+        }
+
         private Tuple<string,string,Dictionary<string,object>> Cuando(ParseTreeNode node)
         {
             var campo = GetValueForTerm("campo", node);
@@ -124,7 +173,6 @@ namespace SearchLang
                 (string.Format("SELECT {0} FROM {1} WHERE [default] = @param1", campo, tabla),
                 tabla,
                 new Dictionary<string, object> {{ "param1",ConvertParamToProperType(where)} });
-            
         }
 
 
