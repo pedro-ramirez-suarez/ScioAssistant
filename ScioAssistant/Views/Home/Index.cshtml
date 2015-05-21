@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+<img src="@Url.Content("~/Content/logo.png")" id="micro" class="logo" onclick="startSpeak()" />
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        
+
+            <div class="form-group">
+                <input type="text" id="query" class="form-control" style="max-width:350px!important;" >
+
+        
+            </div>
+    </div>
+    <div class="col-md-2">
+        <a class="btn btn-success startSpeak" href="javascript:void(0);" onclick="goSearch()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+    </div>
+    
+</div>
+
+<div class="row" id="results">
+</div>
+
+    <script>
+        var recognition;
+        var final_transcript;
+        var searchUrl = '@Url.Action("Search","Home")';
+
+        function startSpeak() {
+            if ($('#micro').hasClass('recording')) {
+                stopSpeak();
+                return;
+            }
+            $('#query').val('');
+
+            $('#micro').addClass('recording');
+            final_transcript = '';
+            recognition = new webkitSpeechRecognition();
+            recognition.lang = "es-MX";
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.onresult = function (event) {
+                var interim_transcript = '';
+                for (var i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        final_transcript += event.results[i][0].transcript;
+                    } else {
+                        if (event.results[i][0].transcript != '')
+                            interim_transcript += event.results[i][0].transcript;
+                    }
+                }
+                if (interim_transcript != '') {
+                    $('#query').val(interim_transcript);
+                    final_transcript = interim_transcript;
+                }
+            }
+            recognition.start();
+            $('.startSpeak').hide();
+        }
+
+        function stopSpeak() {
+            $('#query').val(final_transcript);
+            $('#micro').removeClass('recording');
+            $('.startSpeak').show();
+        }
+
+        function goSearch() {
+            $.post(
+                searchUrl,
+                { query: $('#query').val() },
+                function (result) {
+                    var jsonData = JSON.parse(result);
+                    $('#results').html('');
+                    $('#results').append('<h2>This is what I found</h2>');
+                    var item = '';
+                    for (var x in jsonData) {
+                        var i = jsonData[x];
+                        var names = Object.keys(i)
+                        item = '<div class="col-md-3"><div class="well">';
+                        for (var j in names) {
+                            if (names[j] == 'ID' || names[j] == 'id' || names[j] == 'Id')
+                                continue;
+                            item += '<p><b>' + names[j] + '</b> ' + i[names[j]] + '</p>';
+                        }
+                        item += '</div></div>';
+                        $('#results').append(item);
+                    }
+                });
+        }
+
+    </script>
