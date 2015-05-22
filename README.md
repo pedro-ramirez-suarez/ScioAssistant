@@ -15,7 +15,7 @@ There are many tools to build DLSs, for .Net some of them are:
 For this demo I use <b>Irony.Net</b>, Irony.net allows us to define the grammar and provides a parser that we use to then translate the expression entered by the user in to a SQL query.
 
 
-Voice or Speechrecognition?
+Voice or Speech recognition?
 
 <b>Speech</b> recognition is the translation of spoken words into text.
 
