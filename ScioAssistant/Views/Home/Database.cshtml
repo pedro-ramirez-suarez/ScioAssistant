@@ -3,11 +3,12 @@
     ViewBag.Title = "Database";
 }
 
-<h2>Corre el siguiente script(SQL Server 2008 R2) para crear y llenar con datos de prueba la base de datos</h2>
+<h4 style="margin-top:20px;margin-bottom:20px;">Corre el siguiente script(MSSQL 2008 R2) para crear la base de datos(dslDB) y llenarla con datos de prueba.</h4>
 <div class="row">
 
     <div class="col-md-12">
-        <pre><code>USE [master]
+        <pre><code>--Modifica la ruta de la los archivos dslDB.mdf y dslDB_log.ldf en caso de ser necesario
+USE [master]
 GO
 /****** Object:  Database [dslDB]    Script Date: 5/21/2015 9:33:24 PM ******/
 CREATE DATABASE [dslDB] ON  PRIMARY 

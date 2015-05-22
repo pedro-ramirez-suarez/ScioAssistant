@@ -11,7 +11,7 @@
         
 
             <div class="form-group">
-                <input type="text" id="query" class="form-control" style="max-width:350px!important;" >
+                <input type="text" id="query" class="form-control" style="max-width:350px!important;"  onkeyup="ifEnterSearch(event)">
 
         
             </div>
@@ -26,6 +26,7 @@
 </div>
 
     <script>
+        var jarvis = new Audio('@Url.Content("~/Content/jarvis.mp3")');
         var recognition;
         var final_transcript;
         var searchUrl = '@Url.Action("Search","Home")';
@@ -69,16 +70,22 @@
             goSearch();
         }
 
+        function ifEnterSearch(event) {
+            if (event.keyCode == 13)
+                goSearch();
+        }
         function goSearch() {
+            jarvis.load();
+            jarvis.play();
             $.post(
                 searchUrl,
                 { query: $('#query').val() },
                 function (result) {
                     var jsonData = JSON.parse(result);
                     $('#results').html('');
+                    $('#results').hide('fast');
                     $('#results').append('<h2>This is what I found</h2>');
                     var item = '';
-                    console.log(jsonData.length);
                     if (jsonData.length == 0)
                     {
                         $('#results').append('<h2><label class="label label-info">La búsqueda no produjo resultados</label><h2>');
@@ -99,6 +106,7 @@
                         item += '</div></div>';
                         $('#results').append(item);
                     }
+                    $('#results').show('slow');
                 });
         }
 

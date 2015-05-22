@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Sintáxis";
+}
+
+<h2>Sintáxis</h2>
+<div class="row">
+    <div class="col-md-12">
+        <h3>El asistente puede contestar el siguiente tipo de preguntas:</h3>
+        <h4>Las preguntas de ejemplo usan datos que están incluidos en el <a href="@Url.Action("database","home")" target="_blank">script</a> para crear la base de datos</h4>
+        <ul style="margin-top:20px;">
+            <li>
+                <p>Cuantos (tabla, soporta plural) tiene (tabla 2) X, ejemplo:</p>
+                <p><code>cuantas embarcaciones tiene contrato 123456</code></p>
+            </li>
+            <li>
+                <p>En cuantos (tabla, soporta plural) esta (tabla) X, ejemplo:</p>
+                <p><code>en cuantos contratos esta embarcacion uno</code></p>
+            </li>
+            <li>
+                <p>Que (campo) tiene (tabla) X, ejemplo:</p>
+                <p><code>que capacidad tiene embarcacion morelos</code></p>
+            </li>
+            <li>
+                <p>Que (tabla) (campo) antes/despues de X, ejemplo:</p>
+                <p><code>que contrato empieza antes de '12/12/2015'</code></p>
+            </li>
+            <li>
+                <p>Cual (tabla) tiene mayor/menor (campo), ejemplo:</p>
+                <p><code>cual embarcacion tiene mayor velocidad</code></p>
+            </li>
+            <li>
+                <p>Cual (tabla) tiene mas/menos (tabla 2, soporta plural), ejemplo:</p>
+                <p><code>cual contrato tiene menos embarcaciones</code></p>
+            </li>
+            <li>
+                <p>Cuando (campo) (tabla) X, ejemplo:</p>
+                <p><code>cuando empieza contrato ABCDE</code></p>
+            </li>
+        </ul>
+    </div>
+</div>
+

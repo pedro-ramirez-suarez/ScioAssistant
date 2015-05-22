@@ -27,6 +27,11 @@ namespace ScioAssistant.Controllers
             return View();
         }
 
+        public ActionResult Preguntas()
+        {
+            return View();
+        }
+        
         [HttpPost]
         public ActionResult Search(string query)
         {
