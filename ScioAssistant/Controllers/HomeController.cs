@@ -42,11 +42,20 @@ namespace ScioAssistant.Controllers
                     return Content(JsonConvert.SerializeObject(new List<object> () {new { error = "Lo siento, no puedo entenderte, intenta de nuevo" }}));
                 }
             }
-            var execute = lang.QueryStatement(tree.Root.ChildNodes[0]);
-            var db = new CustomSearch.data.DataAccess("default");
-            var result = db.ExecuteSearch(execute.Item1, execute.Item2, execute.Item3);
-            //Check if result returned something, if not, send custom msg
-            return Content(JsonConvert.SerializeObject(result));
+            try
+            {
+                var execute = lang.QueryStatement(tree.Root.ChildNodes[0]);
+                var db = new CustomSearch.data.DataAccess("default");
+                var result = db.ExecuteSearch(execute.Item1, execute.Item2, execute.Item3);
+                //Check if result returned something, if not, send custom msg
+                return Content(JsonConvert.SerializeObject(result));
+            }
+            catch (Exception e)
+            {
+                return Content(JsonConvert.SerializeObject(new List<object>() { new { error = "Lo siento, no puedo entenderte, intenta de nuevo" } }));
+            }
+            
+            
         }
     }
 }

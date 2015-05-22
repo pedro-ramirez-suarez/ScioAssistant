@@ -17,6 +17,7 @@ namespace SearchLang
             //Terminals
             var cuantos = ToTerm("cuantos");
             var cuantas = ToTerm("cuantas");
+            var cual = ToTerm("cual");
             var que = ToTerm("que");
             var cuando = ToTerm("cuando");
             var tiene  = ToTerm("tiene");
@@ -37,8 +38,8 @@ namespace SearchLang
             var cuantosStatement = new NonTerminal("cuantosStatement");
             var queStatement = new NonTerminal("queStatement");
             var cuandoStatement = new NonTerminal("cuandoStatement");
-            var queMayorMenorStatement = new NonTerminal("queMayorMenorStatement");
-            var queMasMenosStatement = new NonTerminal("queMasMenosStatement");
+            var cualMayorMenorStatement = new NonTerminal("queMayorMenorStatement");
+            var cualMasMenosStatement = new NonTerminal("queMasMenosStatement");
 
             var tabla = new NonTerminal("tabla");
             var tabla2 = new NonTerminal("tabla2");
@@ -69,14 +70,14 @@ namespace SearchLang
             //que pregunta
             queStatement.Rule = (que + campo + tiene + tabla + whereId) | (que + tabla + campo + antesdespues + de +whereId );
             //que Mayor menor pregunta
-            queMayorMenorStatement.Rule = que | tabla | tiene | mayormenor | campo;            
+           cualMayorMenorStatement.Rule = cual + tabla + tiene + mayormenor + campo;            
             //que menos mas pregunta
-            queMasMenosStatement.Rule = que | tabla | tiene | masmenos | tabla2;
+           cualMasMenosStatement.Rule = cual + tabla +  tiene + masmenos + tabla2;
 
             //cuando preguta
             cuandoStatement.Rule = cuando + campo + tabla + whereId;
 
-            comando.Rule = cuantosStatement | queStatement | cuandoStatement | queMasMenosStatement | queMayorMenorStatement;
+            comando.Rule = cuantosStatement | queStatement | cuandoStatement | cualMasMenosStatement | cualMayorMenorStatement;
             this.Root = comando;
         }
 
@@ -152,14 +153,14 @@ namespace SearchLang
             var campo = GetValueForTerm("campo", node);
             var tabla = GetValueForTerm("tabla", node);
             var tabla2 = GetValueForTerm("tabla2", node);
-            tabla2 = tabla.EndsWith("es") ? tabla.Remove(tabla.Length - 2) : tabla;
-            tabla2 = tabla.EndsWith("s") ? tabla.Remove(tabla.Length - 1) : tabla;
+            tabla2 = tabla2.EndsWith("es") ? tabla2.Remove(tabla2.Length - 2) : tabla2;
+            tabla2 = tabla2.EndsWith("s") ? tabla2.Remove(tabla2.Length - 1) : tabla2;
 
             var cantidad = GetValueForTerm("masmenos", node);
             
             return new Tuple<string, string, Dictionary<string, object>>
-                (string.Format("SELECT {0}Id as [default],count({1}Id) as Total from {2} GROUP BY {0}Id",tabla,tabla2,tabla+ tabla2),
-                tabla + tabla2,
+                (string.Format("SELECT top 1 {0}Id as [default],count({1}Id) as Total from {2} GROUP BY {0}Id ORDER BY Total DESC",tabla,tabla2,tabla+ tabla2),
+                tabla ,
                 new Dictionary<string, object> { });
         }
 
