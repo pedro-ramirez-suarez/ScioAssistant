@@ -208,6 +208,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Database.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

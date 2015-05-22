@@ -1,0 +1,209 @@
+﻿
+@{
+    ViewBag.Title = "Database";
+}
+
+<h2>Corre el siguiente script(SQL Server 2008 R2) para crear y llenar con datos de prueba la base de datos</h2>
+<div class="row">
+
+    <div class="col-md-12">
+        <pre><code>USE [master]
+GO
+/****** Object:  Database [dslDB]    Script Date: 5/21/2015 9:33:24 PM ******/
+CREATE DATABASE [dslDB] ON  PRIMARY 
+( NAME = N'dslDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS\MSSQL\DATA\dslDB.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'dslDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS\MSSQL\DATA\dslDB_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [dslDB].[dbo].[sp_fulltext_database] @@action = 'enable'
+end
+GO
+ALTER DATABASE [dslDB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [dslDB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [dslDB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [dslDB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [dslDB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [dslDB] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [dslDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [dslDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [dslDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [dslDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [dslDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [dslDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [dslDB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [dslDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [dslDB] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [dslDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [dslDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [dslDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [dslDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [dslDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [dslDB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [dslDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [dslDB] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [dslDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [dslDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [dslDB] SET DB_CHAINING OFF 
+GO
+USE [dslDB]
+GO
+/****** Object:  Table [dbo].[Contrato]    Script Date: 5/21/2015 9:33:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Contrato](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Numero] [varchar](50) NOT NULL,
+	[Empieza] [date] NOT NULL,
+	[Termina] [date] NULL,
+ CONSTRAINT [PK_Contract] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ContratoEmbarcacion]    Script Date: 5/21/2015 9:33:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ContratoEmbarcacion](
+	[Id] [uniqueidentifier] NOT NULL,
+	[ContratoId] [varchar](50) NOT NULL,
+	[EmbarcacionId] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_ContractShip] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Embarcacion]    Script Date: 5/21/2015 9:33:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Embarcacion](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Nombre] [varchar](50) NOT NULL,
+	[Capacidad] [int] NOT NULL,
+	[Velocidad] [int] NOT NULL,
+ CONSTRAINT [PK_Ship] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+INSERT [dbo].[Contrato] ([Id], [Numero], [Empieza], [Termina]) VALUES (N'cc53eaec-bea5-41a3-a61e-c271ce2f51a2', N'123456', CAST(N'2015-05-21' AS Date), CAST(N'2015-12-07' AS Date))
+GO
+INSERT [dbo].[Contrato] ([Id], [Numero], [Empieza], [Termina]) VALUES (N'799b41db-2e19-4cc7-a22d-e87cb4bb611d', N'ABCDE', CAST(N'2015-02-10' AS Date), CAST(N'2015-06-20' AS Date))
+GO
+INSERT [dbo].[Contrato] ([Id], [Numero], [Empieza], [Termina]) VALUES (N'9f9104fa-e005-48c4-add9-f6cb9c5af56c', N'456123', CAST(N'2015-05-16' AS Date), CAST(N'2015-08-29' AS Date))
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'bc96c79e-90d2-4809-bc0f-02135756b3c4', N'ABCDE', N'mexico')
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'95cdfb2e-8f3a-4100-98af-361a331c16bb', N'456123', N'morelos')
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'd02fa123-b01c-4ec9-b6cf-405f53fafe9d', N'123456', N'hidalgo')
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'a75c2850-0a99-4e7a-a765-4aa7f2c8d78e', N'ABCDE', N'pinta')
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'f0cf5e70-82ca-49bd-9594-69517eeef4ba', N'ABCDE', N'niña')
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'4bcc95f5-9a9b-46f3-8c8d-a1d9f04d3de8', N'456123', N'pinta')
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'd2e6dab4-bac5-4794-9891-abef332efdc2', N'ABCDE', N'morelos')
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'1095eb36-aae2-4cf6-a55e-e193c3f97695', N'123456', N'uno')
+GO
+INSERT [dbo].[ContratoEmbarcacion] ([Id], [ContratoId], [EmbarcacionId]) VALUES (N'fc13e9a7-5716-4d17-b24a-e3c9b454277c', N'123456', N'tres')
+GO
+INSERT [dbo].[Embarcacion] ([Id], [Nombre], [Capacidad], [Velocidad]) VALUES (N'ba0d8873-4756-4c2c-9ba5-030868e78114', N'juarez', 200, 15)
+GO
+INSERT [dbo].[Embarcacion] ([Id], [Nombre], [Capacidad], [Velocidad]) VALUES (N'415dd891-884b-4c45-80fb-0531f60e62b9', N'uno', 200, 20)
+GO
+INSERT [dbo].[Embarcacion] ([Id], [Nombre], [Capacidad], [Velocidad]) VALUES (N'711f247d-5cf7-4526-8f4f-06e1acd565b2', N'hidalgo', 400, 10)
+GO
+INSERT [dbo].[Embarcacion] ([Id], [Nombre], [Capacidad], [Velocidad]) VALUES (N'da85ac1d-bbc8-439c-b470-12de8f852841', N'morelos', 500, 10)
+GO
+INSERT [dbo].[Embarcacion] ([Id], [Nombre], [Capacidad], [Velocidad]) VALUES (N'c03d6eb0-f576-44e0-b7c5-33eea0ceb262', N'tres', 50, 40)
+GO
+INSERT [dbo].[Embarcacion] ([Id], [Nombre], [Capacidad], [Velocidad]) VALUES (N'214fa69e-95c1-475f-9b02-75f209aa1fd3', N'mexico', 600, 15)
+GO
+INSERT [dbo].[Embarcacion] ([Id], [Nombre], [Capacidad], [Velocidad]) VALUES (N'911500a4-f0a4-42a7-8744-9f9b8b37b770', N'niña', 250, 25)
+GO
+INSERT [dbo].[Embarcacion] ([Id], [Nombre], [Capacidad], [Velocidad]) VALUES (N'0991cc2e-d0c5-432e-9413-f3473ff666f0', N'pinta', 150, 20)
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_Contrato]    Script Date: 5/21/2015 9:33:24 PM ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Contrato] ON [dbo].[Contrato]
+(
+	[Numero] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_Embarcacion]    Script Date: 5/21/2015 9:33:24 PM ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Embarcacion] ON [dbo].[Embarcacion]
+(
+	[Nombre] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[ContratoEmbarcacion]  WITH CHECK ADD  CONSTRAINT [FK_ContratoEmbarcacion_Contrato] FOREIGN KEY([ContratoId])
+REFERENCES [dbo].[Contrato] ([Numero])
+GO
+ALTER TABLE [dbo].[ContratoEmbarcacion] CHECK CONSTRAINT [FK_ContratoEmbarcacion_Contrato]
+GO
+ALTER TABLE [dbo].[ContratoEmbarcacion]  WITH CHECK ADD  CONSTRAINT [FK_ContratoEmbarcacion_Embarcacion] FOREIGN KEY([EmbarcacionId])
+REFERENCES [dbo].[Embarcacion] ([Nombre])
+GO
+ALTER TABLE [dbo].[ContratoEmbarcacion] CHECK CONSTRAINT [FK_ContratoEmbarcacion_Embarcacion]
+GO
+USE [master]
+GO
+ALTER DATABASE [dslDB] SET  READ_WRITE 
+GO
+            </code></pre>
+    </div>
+</div>
+
