@@ -56,7 +56,8 @@
                 }
                 if (interim_transcript != '') {
                     $('#query').val(interim_transcript);
-                    //final_transcript = interim_transcript;
+                    if ($.trim(final_transcript) != $.trim(interim_transcript))
+                        final_transcript = interim_transcript;
                 }
             }
             recognition.start();
@@ -89,9 +90,11 @@
                     if (jsonData.length == 0)
                     {
                         $('#results').append('<h2><label class="label label-info">La búsqueda no produjo resultados</label><h2>');
+                        $('#results').show('slow');
                         return;
                     } else if (jsonData[0].error != undefined && jsonData[0].error != null) {
                         $('#results').append('<h1><label class="label label-danger">' + jsonData[0].error + '</label><h1>');
+                        $('#results').show('slow');
                         return;
                     }
                     for (var x in jsonData) {

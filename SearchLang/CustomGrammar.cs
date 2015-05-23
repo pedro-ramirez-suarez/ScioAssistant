@@ -30,6 +30,14 @@ namespace SearchLang
             var menos = ToTerm("menos");
             var mayor = ToTerm("mayor");
             var menor = ToTerm("menor");
+            var muestra = ToTerm("muestra");
+            var todos = ToTerm("todos");
+            var todas = ToTerm("todas");
+            var los = ToTerm("los");
+            var las = ToTerm("las");
+            var el = ToTerm("el");
+            var la = ToTerm("la");
+
 
             var number = new NumberLiteral("number");
             var string_literal = new StringLiteral("string", "'", StringOptions.AllowsDoubledQuote);
@@ -40,6 +48,8 @@ namespace SearchLang
             var cuandoStatement = new NonTerminal("cuandoStatement");
             var cualMayorMenorStatement = new NonTerminal("queMayorMenorStatement");
             var cualMasMenosStatement = new NonTerminal("queMasMenosStatement");
+            var muestraTodoStatement = new NonTerminal("muestraTodoStatement");
+            var muestraUnoStatement = new NonTerminal("muestraUnoStatement");
 
             var tabla = new NonTerminal("tabla");
             var tabla2 = new NonTerminal("tabla2");
@@ -52,6 +62,9 @@ namespace SearchLang
             var cuantoscuantas = new NonTerminal("cuantoscuantas");
             var mayormenor = new NonTerminal("mayormenor");
             var masmenos = new NonTerminal("masmenos");
+            var todostodas = new NonTerminal("todostodas");
+            var ella = new NonTerminal("ella");
+            var loslas = new NonTerminal("loslas");
 
             var Id_simple = TerminalFactory.CreateSqlExtIdentifier(this, "id_simple"); //covers normal identifiers (abc) and quoted id's ([abc d], "abc d")
             id.Rule = Id_simple;
@@ -61,9 +74,13 @@ namespace SearchLang
             cuantoscuantas.Rule = cuantos | cuantas;
             mayormenor.Rule = mayor | menor;
             masmenos.Rule = mas | menos;
+            todostodas.Rule = todos | todas;
+            ella.Rule = el | la;
+            loslas.Rule = los | las;
 
             campo.Rule = id;
             whereId.Rule = string_literal | number;
+            
             //Cuanto pregunta
             cuantosStatement.Rule = (cuantoscuantas + tabla + tiene + tabla2 + whereId) | (en + cuantoscuantas + tabla + esta + tabla2 + whereId);
             
@@ -73,11 +90,16 @@ namespace SearchLang
            cualMayorMenorStatement.Rule = cual + tabla + tiene + mayormenor + campo;            
             //que menos mas pregunta
            cualMasMenosStatement.Rule = cual + tabla +  tiene + masmenos + tabla2;
-
+            
             //cuando preguta
             cuandoStatement.Rule = cuando + campo + tabla + whereId;
 
-            comando.Rule = cuantosStatement | queStatement | cuandoStatement | cualMasMenosStatement | cualMayorMenorStatement;
+            //muestra Todo pregunta
+            muestraTodoStatement.Rule = muestra + todostodas + loslas + tabla;
+            //muestra uno pregunta
+            muestraUnoStatement.Rule = muestra + ella + tabla + whereId;
+
+            comando.Rule = cuantosStatement | queStatement | cuandoStatement | cualMasMenosStatement | cualMayorMenorStatement | muestraTodoStatement | muestraUnoStatement;
             this.Root = comando;
         }
 
@@ -100,6 +122,10 @@ namespace SearchLang
                         return QueMayorMenor(node);
                     case "queMasMenosStatement":
                         return QueMasMenos(node);
+                    case "muestraTodoStatement":
+                        return MuestraTodo(node);
+                    case "muestraUnoStatement":
+                        return MuestraUno(node);
                     default :
                         return new Tuple<string, string, Dictionary<string, object>>(string.Empty, string.Empty, new Dictionary<string, object>());
                 }
@@ -144,7 +170,6 @@ namespace SearchLang
                 (string.Format("SELECT top 1 [default],{0} FROM {1} order by {2} {3}",campo,tabla,campo,cantidad =="mayor" ? "DESC" : "ASC"),
                 tabla ,
                 new Dictionary<string, object> { });
-            
         }
 
 
@@ -208,6 +233,31 @@ namespace SearchLang
             }
             else
                 return new Tuple<string, string, Dictionary<string, object>>(string.Empty, string.Empty, new Dictionary<string, object>());
+        }
+
+
+        private Tuple<string, string, Dictionary<string, object>> MuestraTodo(ParseTreeNode node)
+        {
+            var tabla = GetValueForTerm("tabla", node);
+            tabla = tabla.EndsWith("es") ? tabla.Remove(tabla.Length - 2) : tabla;
+            tabla = tabla.EndsWith("s") ? tabla.Remove(tabla.Length - 1) : tabla;
+
+            return new Tuple<string, string, Dictionary<string, object>>
+                (string.Format("Select * FROM {0}", tabla),
+                tabla,
+                new Dictionary<string, object> { });
+        }
+
+
+        private Tuple<string, string, Dictionary<string, object>> MuestraUno(ParseTreeNode node)
+        {
+            var tabla = GetValueForTerm("tabla", node);
+            var where = GetValueForTerm("whereId", node);
+
+            return new Tuple<string, string, Dictionary<string, object>>
+                (string.Format("SELECT *  FROM {0} WHERE [default] = @param1", tabla),
+                tabla,
+                new Dictionary<string, object> { { "param1", ConvertParamToProperType(where) } });
         }
 
         private object ConvertParamToProperType(string val)
