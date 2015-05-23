@@ -39,6 +39,13 @@ namespace ScioAssistant.Controllers
             ParseTree tree;
             Parser parser = new Parser(lang);
             tree = parser.Parse(query);
+            //replace accents
+            query = query.Replace("á", "a");
+            query = query.Replace("í", "i");
+            query = query.Replace("ó", "o");
+            query = query.Replace("ú", "u");
+            query = query.Replace("é", "e");
+
             if (tree.Root == null || tree.Root.ChildNodes[0] == null)
             {
                 //add single quotes in last word and try again
