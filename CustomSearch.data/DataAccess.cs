@@ -62,7 +62,10 @@ namespace CustomSearch.data
 
             catch (Exception e)
             {
-                //do nothing for now
+                //add a custom message
+                dynamic error = new ExpandoObject();
+                error.error = "Lo siento, no puedo entenderte, intenta de nuevo" ;
+                result.Add(error);
             }
             finally 
             {
