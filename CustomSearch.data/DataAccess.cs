@@ -27,12 +27,11 @@ namespace CustomSearch.data
         public List<dynamic> ExecuteSearch(string command, string tableName, Dictionary<string,object> pars)
         {
             var result = new List<dynamic>();
-            //replace the default field
+            //replace the tag with the default field for each table
             command = command.Replace("[default]", Tables[tableName]);
-
             try
             {
-                //prepare connection
+                //prepare connection and open it
                 var conn = new SqlConnection(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString);
                 var cmd = new SqlCommand(command, conn);
                 conn.Open();
@@ -62,7 +61,9 @@ namespace CustomSearch.data
             }
 
             catch (Exception e)
-            { }
+            {
+                //do nothing for now
+            }
             finally 
             {
             }

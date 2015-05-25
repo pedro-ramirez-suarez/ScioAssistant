@@ -35,24 +35,24 @@ namespace ScioAssistant.Controllers
         [HttpPost]
         public ActionResult Search(string query)
         {
-            var lang = new CustomGrammar();
-            ParseTree tree;
-            Parser parser = new Parser(lang);
-            tree = parser.Parse(query);
-            //replace accents
-            query = query.Replace("á", "a");
+            //replace accents and trim the query
+            query = query.Replace("á", "a").Trim();
             query = query.Replace("í", "i");
             query = query.Replace("ó", "o");
             query = query.Replace("ú", "u");
             query = query.Replace("é", "e");
 
+            var lang = new CustomGrammar();
+            ParseTree tree;
+            Parser parser = new Parser(lang);
+            tree = parser.Parse(query);
+            //if the statement is not recognized, try to add single quotes in the last word and try again
             if (tree.Root == null || tree.Root.ChildNodes[0] == null)
             {
-                //add single quotes in last word and try again
                 var words = query.Split(new char[] {' '});
                 words[words.Length - 1] = "'" + words[words.Length - 1] + "'";
                 query = string.Join(" ", words);
-                //if is still null, send a custom message
+                //if is still null, return an error
                 tree = parser.Parse(query);
                 if (tree.Root == null || tree.Root.ChildNodes[0] == null)
                 {
@@ -64,7 +64,7 @@ namespace ScioAssistant.Controllers
                 var execute = lang.QueryStatement(tree.Root.ChildNodes[0]);
                 var db = new CustomSearch.data.DataAccess("default");
                 var result = db.ExecuteSearch(execute.Item1, execute.Item2, execute.Item3);
-                //Check if result returned something, if not, send custom msg
+                //return the results as Json.Net string, we use Json.Net because expando objects are not serialized correcty by default serializator
                 return Content(JsonConvert.SerializeObject(result));
             }
             catch (Exception e)

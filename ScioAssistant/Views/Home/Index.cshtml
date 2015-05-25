@@ -26,7 +26,10 @@
 </div>
 
     <script>
-        var jarvis = new Audio('@Url.Content("~/Content/jarvis.mp3")');
+        var siriStart = new Audio('@Url.Content("~/Content/SiriStart.mp3")');
+        var siriFound = new Audio('@Url.Content("~/Content/SiriFound.mp3")');
+        var siriError = new Audio('@Url.Content("~/Content/siriError.mp3")');
+
         var recognition;
         var final_transcript;
         var searchUrl = '@Url.Action("Search","Home")';
@@ -36,8 +39,10 @@
                 stopSpeak();
                 return;
             }
-            $('#query').val('');
+            siriStart.load();
+            siriStart.play();
 
+            $('#query').val('');
             $('#micro').addClass('recording');
             final_transcript = '';
             recognition = new webkitSpeechRecognition();
@@ -76,8 +81,7 @@
                 goSearch();
         }
         function goSearch() {
-            jarvis.load();
-            jarvis.play();
+            
             $.post(
                 searchUrl,
                 { query: $('#query').val() },
@@ -89,14 +93,20 @@
                     var item = '';
                     if (jsonData.length == 0)
                     {
+                        siriError.load();
+                        siriError.play();
                         $('#results').append('<h2><label class="label label-info">La búsqueda no produjo resultados</label><h2>');
                         $('#results').show('slow');
                         return;
                     } else if (jsonData[0].error != undefined && jsonData[0].error != null) {
+                        siriError.load();
+                        siriError.play();
                         $('#results').append('<h1><label class="label label-danger">' + jsonData[0].error + '</label><h1>');
                         $('#results').show('slow');
                         return;
                     }
+                    siriFound.load();
+                    siriFound.play();
                     for (var x in jsonData) {
                         var i = jsonData[x];
                         var names = Object.keys(i)
@@ -104,7 +114,7 @@
                         for (var j in names) {
                             if (names[j] == 'ID' || names[j] == 'id' || names[j] == 'Id')
                                 continue;
-                            item += '<p><h4 class="label label-default">' + names[j] + '</h4> ' + i[names[j]] + '</p>';
+                            item += '<p><h4 class="label label-default fieldName">' + names[j] + '</h4> ' + i[names[j]] + '</p>';
                         }
                         item += '</div></div>';
                         $('#results').append(item);

@@ -176,6 +176,9 @@
     <Content Include="Content\jarvis.mp3" />
     <Content Include="Content\logo.jpg" />
     <Content Include="Content\logo.png" />
+    <Content Include="Content\SiriError.mp3" />
+    <Content Include="Content\SiriFound.mp3" />
+    <Content Include="Content\SiriStart.mp3" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
