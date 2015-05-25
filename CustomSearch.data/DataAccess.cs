@@ -17,6 +17,7 @@ namespace CustomSearch.data
         private string ConnectionStringName { get; set; }
         public DataAccess(string connectionStringName) 
         {
+            //Add all the tables and the default field used for searches
             this.ConnectionStringName = connectionStringName;
             Tables = new Dictionary<string, string>();
             Tables.Add("contrato","Numero" );
@@ -62,10 +63,7 @@ namespace CustomSearch.data
 
             catch (Exception e)
             {
-                //add a custom message
-                dynamic error = new ExpandoObject();
-                error.error = "Lo siento, no puedo entenderte, intenta de nuevo" ;
-                result.Add(error);
+                //do nothing for now
             }
             finally 
             {
