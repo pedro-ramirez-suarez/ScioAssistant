@@ -66,7 +66,7 @@ namespace SearchLang
             var ella = new NonTerminal("ella");
             var loslas = new NonTerminal("loslas");
 
-            var Id_simple = TerminalFactory.CreateSqlExtIdentifier(this, "id_simple"); //covers normal identifiers (abc) and quoted id's ([abc d], "abc d")
+            var Id_simple = TerminalFactory.CreateSqlExtIdentifier(this, "id_simple"); //this covers normal identifiers (abc) and quoted id's ([abc d], "abc d")
             id.Rule = Id_simple;
             tabla.Rule = id;
             tabla2.Rule = id;
