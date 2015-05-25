@@ -184,7 +184,7 @@ namespace SearchLang
             var cantidad = GetValueForTerm("masmenos", node);
             
             return new Tuple<string, string, Dictionary<string, object>>
-                (string.Format("SELECT top 1 {0}Id as [default],count({1}Id) as Total from {2} GROUP BY {0}Id ORDER BY Total DESC",tabla,tabla2,tabla+ tabla2),
+                (string.Format("SELECT top 1 {0}Id as [default],count({1}Id) as Total from {2} GROUP BY {0}Id ORDER BY Total {3}",tabla,tabla2,tabla+ tabla2, cantidad =="mas" ? "DESC" : "ASC"),
                 tabla ,
                 new Dictionary<string, object> { });
         }
