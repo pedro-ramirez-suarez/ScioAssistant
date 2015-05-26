@@ -47,16 +47,26 @@ img {
     display:block; 
     margin-top:20px; 
     margin-bottom:20px;
-    
 }
 
-img:hover {
+
+
+.source:hover {
     -webkit-filter: drop-shadow(2px 2px 5px rgb(255, 255, 255));
     cursor:pointer;
 }
 
+#micro {
+    cursor:pointer;
+}
+
+
 .recording {
      -webkit-filter: grayscale(0%) invert() saturate(250%) contrast(250%); 
+}
+
+.recording:hover {
+     -webkit-filter: grayscale(0%) invert() saturate(250%) contrast(250%);
 }
 
 .fieldName {
