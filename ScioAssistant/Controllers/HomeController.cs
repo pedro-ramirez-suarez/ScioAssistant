@@ -65,6 +65,10 @@ namespace ScioAssistant.Controllers
             //remove any dot or comma 
             query = query.Replace(".", "");
             query = query.Replace(",", "");
+            query = query.Replace("¿", "");
+            query = query.Replace("?", "");
+            query = query.Replace("!", "");
+            query = query.Replace("¡", "");
 
             var lang = new CustomGrammar();
             ParseTree tree;

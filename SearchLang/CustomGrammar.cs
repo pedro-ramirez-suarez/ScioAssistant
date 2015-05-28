@@ -31,6 +31,7 @@ namespace SearchLang
             var mayor = ToTerm("mayor");
             var menor = ToTerm("menor");
             var muestra = ToTerm("muestra");
+            var muestrame = ToTerm("muestrame");
             var todos = ToTerm("todos");
             var todas = ToTerm("todas");
             var los = ToTerm("los");
@@ -65,6 +66,7 @@ namespace SearchLang
             var todostodas = new NonTerminal("todostodas");
             var ella = new NonTerminal("ella");
             var loslas = new NonTerminal("loslas");
+            var muestramuestrame = new NonTerminal("muestramuestrame");
 
             var Id_simple = TerminalFactory.CreateSqlExtIdentifier(this, "id_simple"); //this covers normal identifiers (abc) and quoted id's ([abc d], "abc d")
             id.Rule = Id_simple;
@@ -77,7 +79,7 @@ namespace SearchLang
             todostodas.Rule = todos | todas;
             ella.Rule = el | la;
             loslas.Rule = los | las;
-
+            muestramuestrame.Rule = muestra | muestrame;
             campo.Rule = id;
             whereId.Rule = string_literal | number;
             
@@ -95,9 +97,9 @@ namespace SearchLang
             cuandoStatement.Rule = cuando + campo + tabla + whereId;
 
             //muestra Todo pregunta
-            muestraTodoStatement.Rule = muestra + todostodas + loslas + tabla;
+            muestraTodoStatement.Rule = muestramuestrame + todostodas + loslas + tabla;
             //muestra uno pregunta
-            muestraUnoStatement.Rule = muestra + ella + tabla + whereId;
+            muestraUnoStatement.Rule = muestramuestrame + ella + tabla + whereId;
 
             comando.Rule = cuantosStatement | queStatement | cuandoStatement | cualMasMenosStatement | cualMayorMenorStatement | muestraTodoStatement | muestraUnoStatement;
             this.Root = comando;
