@@ -43,22 +43,29 @@
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="Fun with DSL" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
             <TextBlock Text="Scio Assistant" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel x:Name="buttons" Grid.Row="0" Margin="12,0,12,0">
+            <StackPanel x:Name="buttons" Grid.Row="0" Margin="12,0,12,0" Orientation="Vertical">
                 <!--<Button x:Name="TextToSpeech" Click="TextToSpeech_Click"  Content="Text to Speech" />-->
                 <Button x:Name="SpeechToText" Click="SpeechToText_Click"  Content="Haz una pregunta" Background="#FF288EAC" />
+                <TextBox x:Name="txtPregunta"></TextBox>
+                <Button x:Name="busca" Content="Busca" Background="#FF28AC70" Width="200" Click="busca_Click" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Row="1" x:Name="results">
-                
-            </StackPanel>
+
+            <ScrollViewer Margin="12,12,12,12" Padding="5,5,5,5" Grid.Row="1" >
+                <StackPanel Orientation="Vertical" x:Name="results" >
+
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
 
         <!--Uncomment to see an alignment grid to help ensure your controls are

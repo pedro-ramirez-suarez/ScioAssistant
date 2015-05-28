@@ -53,12 +53,18 @@ namespace ScioAssistant.Controllers
 
         private string LocalSearch(string query)
         {
+                    
+
             //replace accents and trim the query
             query = query.Replace("á", "a").Trim();
             query = query.Replace("í", "i");
             query = query.Replace("ó", "o");
             query = query.Replace("ú", "u");
             query = query.Replace("é", "e");
+
+            //remove any dot or comma 
+            query = query.Replace(".", "");
+            query = query.Replace(",", "");
 
             var lang = new CustomGrammar();
             ParseTree tree;

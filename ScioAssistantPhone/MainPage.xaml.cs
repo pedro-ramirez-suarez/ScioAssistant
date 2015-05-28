@@ -12,6 +12,7 @@ using Windows.Phone.Speech.Synthesis;
 using ScioAssistantPhone.Resources;
 using ScioAssistantPhone.Serializer;
 using RestSharp;
+using Newtonsoft.Json;
 
 namespace ScioAssistantPhone
 {
@@ -41,43 +42,68 @@ namespace ScioAssistantPhone
 
             if (recoResult.ResultStatus == SpeechRecognitionUIStatus.Succeeded)
             {
-                //launch the query
-                var client = new RestClient("http://scioassistant.cloudapp.net");
-                client.AddHandler("application/json", new DynamicSerializer());
-
-                client.ExecuteAsync<dynamic>(new RestRequest("home/searchforphone?query=" + recoResult.RecognitionResult.Text), (res) =>
-                {
-                    MessageBox.Show("result " + res.Content);
-                });
-
-                //MessageBox.Show(string.Format("You said {0}.", recoResult.RecognitionResult.Text));
-
-                //display the results
+                txtPregunta.Text = recoResult.RecognitionResult.Text.Replace(".","");
+                LaunchSearch();
             }
         }
 
-       //code to speak
-        /*
-          //Part 1 - Basic Demo
-            SpeechSynthesizer synth = new SpeechSynthesizer();
-            await synth.SpeakTextAsync("You are reading Visual Studio Magazine!");  
-         
-            //Part 2 - Different Voices
-            //var frenchVoice = InstalledVoices.All
-            //                               .Where(voice => voice.Language.Equals("fr-FR") & voice.Gender == VoiceGender.Female)
-            //                               .FirstOrDefault();
-            //synth.SetVoice(frenchVoice);
-            //await synth.SpeakTextAsync("Salut tout le monde!");
+        public  void busca_Click(object sender, RoutedEventArgs e)
+        {
+            LaunchSearch();
+        }
 
-            //Part 3 - SSML
-            //SpeechSynthesizer synth = new SpeechSynthesizer();
-            //// Build an SSML prompt in a string.
-            //string ssmlPrompt = "<speak version=\"1.0\" ";
-            //ssmlPrompt += "xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\">";
-            //ssmlPrompt += "This voice speaks English. </speak>";
-            //// Speak the SSML prompt.
-            //await synth.SpeakSsmlAsync(ssmlPrompt);
-         */
+
+        public  void  LaunchSearch()
+        {
+            results.Children.Clear();
+            //launch the query
+            var client = new RestClient("http://scioassistant.cloudapp.net");
+            client.AddHandler("application/json", new DynamicSerializer());
+
+            client.ExecuteAsync<dynamic>(new RestRequest("home/searchforphone?query=" + txtPregunta.Text), (res) =>
+            {
+                //MessageBox.Show("result " + res.Content);
+                var data = JsonConvert.DeserializeObject<dynamic>(res.Content);
+                SpeechSynthesizer synth = new SpeechSynthesizer();
+                var spvoice = InstalledVoices.All
+                            .Where(voice => voice.Language.Equals("es-ES") & voice.Gender == VoiceGender.Female)
+                            .FirstOrDefault();
+                
+                bool found = true;
+
+                //show the results
+                foreach(var e in data)
+                {
+                    string result = e.ToString();
+                    result = result.Replace("{", "").Replace("}", "").Replace("\r\n","").Replace("\"", "");
+                    var lines = result.Split(new char[] { ','});
+                    result = string.Empty;
+                    foreach (var l in lines)
+                    {
+                        if (l.Contains("no puedo entenderte"))
+                        {
+                            found = false;
+                            spvoice = InstalledVoices.All
+                            .Where(voice => voice.Language.Equals("es-ES") & voice.Gender == VoiceGender.Male)
+                            .FirstOrDefault();
+                            break;
+                        }
+                        if (!l.Trim().ToLower().StartsWith("id"))
+                            result += l + "\r\n";
+                        
+                    }
+                    results.Children.Add(new TextBlock { Text = result });
+                }
+                synth.SetVoice(spvoice);
+                if (found)
+                    synth.SpeakTextAsync("Esto es lo que encontré");
+                else
+                    synth.SpeakTextAsync("Lo siento, no puedo entenderte, intenta de nuevo.");
+            });
+        }
+
+
+       
 
     }
 }
