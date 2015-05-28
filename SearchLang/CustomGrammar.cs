@@ -105,7 +105,7 @@ namespace SearchLang
             this.Root = comando;
         }
 
-
+        #region Translator
 
         public Tuple<string, string, Dictionary<string, object>> QueryStatement(ParseTreeNode node)
         {
@@ -134,6 +134,7 @@ namespace SearchLang
             }
             return new Tuple<string, string, Dictionary<string, object>>(string.Empty, string.Empty, new Dictionary<string, object>());
         }
+
         private Tuple<string, string, Dictionary<string, object>> Que(ParseTreeNode node)
         {
             //Que first we need to determine what kind of "que" question is this
@@ -302,7 +303,7 @@ namespace SearchLang
         {
             string val = string.Empty;
             if (node.ChildNodes.Any())
-            {
+           { 
                 foreach(var n in node.ChildNodes)
                 {
                     val = GetFinalToken(n);
@@ -314,5 +315,8 @@ namespace SearchLang
                 val = node.Token.Value.ToString();
             return val;
         }
+
+
+        #endregion
     }
 }
