@@ -43,7 +43,7 @@
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="Fun with DSL" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
             <TextBlock Text="Scio Assistant" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-            
+
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -56,7 +56,11 @@
 
             <StackPanel x:Name="buttons" Grid.Row="0" Margin="12,0,12,0" Orientation="Vertical">
                 <!--<Button x:Name="TextToSpeech" Click="TextToSpeech_Click"  Content="Text to Speech" />-->
-                <Button x:Name="SpeechToText" Click="SpeechToText_Click"  Content="Haz una pregunta" Background="#FF288EAC" />
+                <Button x:Name="SpeechToText" Click="SpeechToText_Click"  Content="" Height="179" BorderThickness="0" >
+                    <Button.Background>
+                        <ImageBrush Stretch="Uniform" ImageSource="/logo.png"/>
+                    </Button.Background>
+                </Button>
                 <TextBox x:Name="txtPregunta"></TextBox>
                 <Button x:Name="busca" Content="Busca" Background="#FF28AC70" Width="200" Click="busca_Click" />
             </StackPanel>
