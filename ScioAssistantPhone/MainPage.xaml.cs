@@ -59,7 +59,7 @@ namespace ScioAssistantPhone
             //launch the query
             var client = new RestClient("http://scioassistant.cloudapp.net");
             client.AddHandler("application/json", new DynamicSerializer());
-
+            //Hard coded...I know...it's temporary
             client.ExecuteAsync<dynamic>(new RestRequest("home/searchforphone?query=" + txtPregunta.Text), (res) =>
             {
                 //MessageBox.Show("result " + res.Content);
