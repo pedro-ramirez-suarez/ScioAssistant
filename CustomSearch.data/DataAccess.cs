@@ -30,10 +30,11 @@ namespace CustomSearch.data
             var result = new List<dynamic>();
             //replace the tag with the default field for each table
             command = command.Replace("[default]", Tables[tableName]);
+            SqlConnection conn = null;
             try
             {
                 //prepare connection and open it
-                var conn = new SqlConnection(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString);
+                conn = new SqlConnection(ConfigurationManager.ConnectionStrings[this.ConnectionStringName].ConnectionString);
                 var cmd = new SqlCommand(command, conn);
                 conn.Open();
                 //add the parameters
@@ -58,15 +59,17 @@ namespace CustomSearch.data
                             item.Add(f, reader[f]);
                     }
                 }
-                conn.Close();
             }
 
             catch (Exception e)
             {
-                //do nothing for now
+                //do nothing for now, just retrow the exception
+                throw e;
             }
             finally 
             {
+                if (conn != null && conn.State == System.Data.ConnectionState.Open)
+                    conn.Close();
             }
             return result;
         }
