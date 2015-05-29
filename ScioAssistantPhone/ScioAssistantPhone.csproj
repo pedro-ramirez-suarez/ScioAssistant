@@ -142,6 +142,7 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="cortana.png" />
     <Content Include="logo.png" />
   </ItemGroup>
   <ItemGroup>

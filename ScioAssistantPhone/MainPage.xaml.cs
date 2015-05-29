@@ -115,6 +115,11 @@ namespace ScioAssistantPhone
                 LaunchSearch();
         }
 
+        private void txtPregunta_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
 
        
 
