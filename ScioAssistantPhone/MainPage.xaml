@@ -18,6 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="5"></RowDefinition>
         </Grid.RowDefinitions>
 
         <!-- LOCALIZATION NOTE:
@@ -61,12 +62,12 @@
                         <ImageBrush Stretch="Uniform" ImageSource="/logo.png"/>
                     </Button.Background>
                 </Button>
-                <TextBox x:Name="txtPregunta"></TextBox>
+                <TextBox x:Name="txtPregunta" KeyUp="txtPregunta_KeyUp"></TextBox>
                 <Button x:Name="busca" Content="Busca" Background="#FF28AC70" Width="200" Click="busca_Click" />
             </StackPanel>
 
             <ScrollViewer Margin="12,12,12,12" Padding="5,5,5,5" Grid.Row="1" >
-                <StackPanel Orientation="Vertical" x:Name="results" >
+                <StackPanel Orientation="Vertical" x:Name="results">
 
                 </StackPanel>
             </ScrollViewer>

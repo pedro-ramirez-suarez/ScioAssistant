@@ -18,11 +18,12 @@ namespace ScioAssistantPhone
 {
     public partial class MainPage : PhoneApplicationPage
     {
+
         // Constructor
         public MainPage()
         {
             InitializeComponent();
-
+            
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
         }
@@ -57,10 +58,10 @@ namespace ScioAssistantPhone
         {
             results.Children.Clear();
             //Hard coded...I know...it's temporary
-            var client = new RestClient("http://scioassistant.cloudapp.net");
+            var client = new RestClient(AppResources.ScioAssistantRoot);
             client.AddHandler("application/json", new DynamicSerializer());
             //Hard coded...I know...it's temporary
-            client.ExecuteAsync<dynamic>(new RestRequest("home/searchforphone?query=" + txtPregunta.Text), (res) =>
+            client.ExecuteAsync<dynamic>(new RestRequest(AppResources.ScioAssistantSearch + txtPregunta.Text), (res) =>
             {
                 //MessageBox.Show("result " + res.Content);
                 var data = JsonConvert.DeserializeObject<dynamic>(res.Content);
@@ -84,7 +85,7 @@ namespace ScioAssistantPhone
                         if (!l.Trim().ToLower().StartsWith("id"))
                             result += l + "\r\n";                        
                     }
-                    results.Children.Add(new TextBlock { Text = result });
+                    results.Children.Add(new TextBlock { Text = result, Padding= new Thickness(2,2,2,8) });
                 }
                 //set voice and message
                 string msg = string.Empty;
@@ -106,6 +107,12 @@ namespace ScioAssistantPhone
                 synth.SetVoice(spvoice);
                 synth.SpeakTextAsync(msg);
             });
+        }
+
+        private void txtPregunta_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+                LaunchSearch();
         }
 
 
