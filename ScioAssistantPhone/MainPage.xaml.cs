@@ -56,7 +56,7 @@ namespace ScioAssistantPhone
         public  void  LaunchSearch()
         {
             results.Children.Clear();
-            //launch the query
+            //Hard coded...I know...it's temporary
             var client = new RestClient("http://scioassistant.cloudapp.net");
             client.AddHandler("application/json", new DynamicSerializer());
             //Hard coded...I know...it's temporary
@@ -65,12 +65,8 @@ namespace ScioAssistantPhone
                 //MessageBox.Show("result " + res.Content);
                 var data = JsonConvert.DeserializeObject<dynamic>(res.Content);
                 SpeechSynthesizer synth = new SpeechSynthesizer();
-                var spvoice = InstalledVoices.All
-                            .Where(voice => voice.Language.Equals("es-ES") & voice.Gender == VoiceGender.Female)
-                            .FirstOrDefault();
-                
+                VoiceInformation spvoice;                
                 bool found = true;
-
                 //show the results
                 foreach(var e in data)
                 {
@@ -82,23 +78,33 @@ namespace ScioAssistantPhone
                     {
                         if (l.Contains("no puedo entenderte"))
                         {
-                            found = false;
-                            spvoice = InstalledVoices.All
-                            .Where(voice => voice.Language.Equals("es-ES") & voice.Gender == VoiceGender.Male)
-                            .FirstOrDefault();
+                            found = false;                            
                             break;
                         }
                         if (!l.Trim().ToLower().StartsWith("id"))
-                            result += l + "\r\n";
-                        
+                            result += l + "\r\n";                        
                     }
                     results.Children.Add(new TextBlock { Text = result });
                 }
-                synth.SetVoice(spvoice);
+                //set voice and message
+                string msg = string.Empty;
                 if (found)
-                    synth.SpeakTextAsync("Esto es lo que encontré");
+                {
+                    msg = "Esto es lo que encontré";
+                    spvoice = InstalledVoices.All
+                            .Where(voice => voice.Language.Equals("es-ES") & voice.Gender == VoiceGender.Female)
+                            .FirstOrDefault();
+                }
                 else
-                    synth.SpeakTextAsync("Lo siento, no puedo entenderte, intenta de nuevo.");
+                {
+                    msg = "Lo siento, no puedo entenderte, intenta de nuevo.";
+                    spvoice = InstalledVoices.All
+                            .Where(voice => voice.Language.Equals("es-ES") & voice.Gender == VoiceGender.Male)
+                            .FirstOrDefault();
+                }
+                
+                synth.SetVoice(spvoice);
+                synth.SpeakTextAsync(msg);
             });
         }
 
