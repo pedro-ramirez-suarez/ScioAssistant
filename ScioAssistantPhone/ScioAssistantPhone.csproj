@@ -144,6 +144,7 @@
     </Content>
     <Content Include="cortana.png" />
     <Content Include="logo.png" />
+    <Content Include="Search.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">

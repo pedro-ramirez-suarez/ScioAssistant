@@ -43,7 +43,7 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="Fun with DSL" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0" Foreground="AntiqueWhite"/>
-            <TextBlock Text="Scio Assistant" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="RoyalBlue"/>
+            <TextBlock Text="Scio Assistant" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="SteelBlue"/>
 
         </StackPanel>
 
@@ -57,15 +57,15 @@
 
             <StackPanel x:Name="buttons" Grid.Row="0" Margin="12,0,12,0" Orientation="Vertical">
                 <!--<Button x:Name="TextToSpeech" Click="TextToSpeech_Click"  Content="Text to Speech" />-->
-                <Button x:Name="SpeechToText" Click="SpeechToText_Click"  Content="" Height="179" BorderThickness="0" >
+                <Button x:Name="SpeechToText" Click="SpeechToText_Click"  Content="" Height="179" BorderThickness="0" Width="180" >
                     <Button.Background>
-                        <ImageBrush Stretch="Uniform" ImageSource="/logo.png"/>
+                        <ImageBrush Stretch="Uniform" ImageSource="/cortana.png"/>
                     </Button.Background>
                 </Button>
                 <TextBox x:Name="txtPregunta" KeyUp="txtPregunta_KeyUp" TextChanged="txtPregunta_TextChanged" Foreground="Black" BorderThickness="1" Background="Silver" ></TextBox>
-                <Button x:Name="busca" Content="" Width="100" Click="busca_Click" BorderThickness="0" Height="101" Margin="166,0" >
+                <Button x:Name="busca" Content="" Width="70" Click="busca_Click" BorderThickness="0" Height="60" Margin="166,0" >
                     <Button.Background>
-                        <ImageBrush ImageSource="/cortana.png" Stretch="UniformToFill"/>
+                        <ImageBrush ImageSource="/Search.png" Stretch="Uniform"/>
                     </Button.Background>
                 </Button>
             </StackPanel>
