@@ -13,6 +13,7 @@ using ScioAssistantPhone.Resources;
 using ScioAssistantPhone.Serializer;
 using RestSharp;
 using Newtonsoft.Json;
+using System.Windows.Media;
 
 namespace ScioAssistantPhone
 {
@@ -83,9 +84,27 @@ namespace ScioAssistantPhone
                             break;
                         }
                         if (!l.Trim().ToLower().StartsWith("id"))
-                            result += l + "\r\n";                        
+                            result += l + "|";                        
                     }
-                    results.Children.Add(new TextBlock { Text = result, Padding= new Thickness(2,2,2,8) });
+                    
+                    var record = result.Split(new char[] { '|'});
+                    var row = new StackPanel { Background = new SolidColorBrush(Color.FromArgb(255, 40,40,40)), Margin= new Thickness(2,2,2,8)};
+                    foreach (var f in record)
+                    {
+                        if (string.IsNullOrWhiteSpace(f))
+                            continue;
+                        var sp = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(2, 2, 2, 8) };
+                        var item = f.Split(new char[] { ':' });
+                        if (!string.IsNullOrWhiteSpace(item[0]))
+                        {
+                            var field = new TextBlock { Text = item[0], Foreground = new SolidColorBrush(Color.FromArgb(255, 30, 144, 255)), FontSize = 30 };
+                            sp.Children.Add(field);
+                        }
+                        var value = new TextBlock { Text = item[1], Foreground = new SolidColorBrush(Color.FromArgb(255, 211, 211, 211)), FontSize = 30 };
+                        sp.Children.Add(value);
+                        row.Children.Add(sp);
+                    }
+                    results.Children.Add(row);
                 }
                 //set voice and message
                 string msg = string.Empty;
@@ -103,7 +122,7 @@ namespace ScioAssistantPhone
                             .Where(voice => voice.Language.Equals("es-ES") & voice.Gender == VoiceGender.Male)
                             .FirstOrDefault();
                 }
-                
+                results.Children.Add(new StackPanel { Height= 60 });
                 synth.SetVoice(spvoice);
                 synth.SpeakTextAsync(msg);
             });
