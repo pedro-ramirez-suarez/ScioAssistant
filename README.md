@@ -31,4 +31,6 @@ We can implement speech recognition in a few ways, but the two most easy are:
 
 - For web applications(our case), we can use webkitSpeechRecognition in javascript
 
-This demo uses webkitSpeechRecognition and is configured for Spanish Mexico
+This demo uses webkitSpeechRecognition and is configured for Spanish Mexico for the web app.
+
+The mobile application is configured for Spanish from Spain because is the only valid culture for speech recognition in Windows Phone.
