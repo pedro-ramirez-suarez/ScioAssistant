@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScioAssistant</RootNamespace>
-    <AssemblyName>ScioAssistant</AssemblyName>
+    <RootNamespace>DeepThought.Web</RootNamespace>
+    <AssemblyName>DeepThought.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -233,6 +233,10 @@
     <ProjectReference Include="..\CustomSearch.data\CustomSearch.data.csproj">
       <Project>{f2fb4bd1-4c66-4e36-8b05-a2f0b5d2497d}</Project>
       <Name>CustomSearch.data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScioAssistant.SmartAgent\DeepThought.SmartAgent.csproj">
+      <Project>{ad2c946d-11c0-45d1-abec-524e373d15eb}</Project>
+      <Name>DeepThought.SmartAgent</Name>
     </ProjectReference>
     <ProjectReference Include="..\SearchLang\SearchLang.csproj">
       <Project>{c522ae42-0900-499e-9a83-3e18289ca85f}</Project>

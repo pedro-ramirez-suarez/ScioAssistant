@@ -7,15 +7,7 @@
 <div class="row">
 
     <div class="col-md-12">
-        <pre><code>--Modifica la ruta de la los archivos dslDB.mdf y dslDB_log.ldf en caso de ser necesario
-USE [master]
-GO
-/****** Object:  Database [dslDB]    Script Date: 5/21/2015 9:33:24 PM ******/
-CREATE DATABASE [dslDB] ON  PRIMARY 
-( NAME = N'dslDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS\MSSQL\DATA\dslDB.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
- LOG ON 
-( NAME = N'dslDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL12.SQLEXPRESS\MSSQL\DATA\dslDB_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
-GO
+        <pre><code>--Crea una base de datos llamada "dslDB" y corre el siguiente script
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
 EXEC [dslDB].[dbo].[sp_fulltext_database] @@action = 'enable'

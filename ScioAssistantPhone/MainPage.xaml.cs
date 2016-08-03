@@ -9,13 +9,13 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Windows.Phone.Speech.Recognition;
 using Windows.Phone.Speech.Synthesis;
-using ScioAssistantPhone.Resources;
-using ScioAssistantPhone.Serializer;
+using DeepThoughtPhone.Resources;
+using DeepThoughtPhone.Serializer;
 using RestSharp;
 using Newtonsoft.Json;
 using System.Windows.Media;
 
-namespace ScioAssistantPhone
+namespace DeepThoughtPhone
 {
     public partial class MainPage : PhoneApplicationPage
     {
@@ -59,10 +59,10 @@ namespace ScioAssistantPhone
         {
             results.Children.Clear();
             //Hard coded...I know...it's temporary
-            var client = new RestClient(AppResources.ScioAssistantRoot);
+            var client = new RestClient(AppResources.DeepThoughtRoot);
             client.AddHandler("application/json", new DynamicSerializer());
             //Hard coded...I know...it's temporary
-            client.ExecuteAsync<dynamic>(new RestRequest(AppResources.ScioAssistantSearch + txtPregunta.Text), (res) =>
+            client.ExecuteAsync<dynamic>(new RestRequest(AppResources.DeepThoughtSearch + txtPregunta.Text), (res) =>
             {
                 //MessageBox.Show("result " + res.Content);
                 var data = JsonConvert.DeserializeObject<dynamic>(res.Content);

@@ -134,10 +134,10 @@
   <data name="AppBarMenuItemText" xml:space="preserve">
     <value>Menu Item</value>
   </data>
-  <data name="ScioAssistantRoot" xml:space="preserve">
-    <value>http://scioassistant.cloudapp.net</value>
+  <data name="DeepThoughtRoot" xml:space="preserve">
+    <value>http://DeepThought.cloudapp.net</value>
   </data>
-  <data name="ScioAssistantSearch" xml:space="preserve">
+  <data name="DeepThoughtSearch" xml:space="preserve">
     <value>home/searchforphone?query=</value>
   </data>
 </root>

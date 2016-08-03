@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(ScioAssistant.Startup))]
-namespace ScioAssistant
+[assembly: OwinStartupAttribute(typeof(DeepThought.Startup))]
+namespace DeepThought
 {
     public partial class Startup
     {

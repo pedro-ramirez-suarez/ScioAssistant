@@ -1,6 +1,6 @@
-﻿using ScioAssistantPhone.Resources;
+﻿using DeepThoughtPhone.Resources;
 
-namespace ScioAssistantPhone
+namespace DeepThoughtPhone
 {
     /// <summary>
     /// Provides access to string resources.

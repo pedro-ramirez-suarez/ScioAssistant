@@ -6,9 +6,9 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using ScioAssistantPhone.Resources;
+using DeepThoughtPhone.Resources;
 
-namespace ScioAssistantPhone
+namespace DeepThoughtPhone
 {
     public partial class App : Application
     {

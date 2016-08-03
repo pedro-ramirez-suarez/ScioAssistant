@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ScioAssistantPhone.Resources {
+namespace DeepThoughtPhone.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ScioAssistantPhone.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ScioAssistantPhone.Resources.AppResources", typeof(AppResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DeepThoughtPhone.Resources.AppResources", typeof(AppResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -106,20 +106,20 @@ namespace ScioAssistantPhone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://scioassistant.cloudapp.net.
+        ///   Looks up a localized string similar to http://DeepThought.cloudapp.net.
         /// </summary>
-        public static string ScioAssistantRoot {
+        public static string DeepThoughtRoot {
             get {
-                return ResourceManager.GetString("ScioAssistantRoot", resourceCulture);
+                return ResourceManager.GetString("DeepThoughtRoot", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to home/searchforphone?query=.
         /// </summary>
-        public static string ScioAssistantSearch {
+        public static string DeepThoughtSearch {
             get {
-                return ResourceManager.GetString("ScioAssistantSearch", resourceCulture);
+                return ResourceManager.GetString("DeepThoughtSearch", resourceCulture);
             }
         }
     }

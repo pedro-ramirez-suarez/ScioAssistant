@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace ScioAssistant
+namespace DeepThought
 {
     public class BundleConfig
     {

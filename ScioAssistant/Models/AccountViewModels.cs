@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ScioAssistant.Models
+namespace DeepThought.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
