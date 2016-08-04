@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace SearchLang
 {
-    [Language("Custom", "1", "Custom searches on natural language")]
-    public class CustomGrammar : Grammar
+    [Language("Natural Language query", "1", "Custom searches on natural language")]
+    public class NaturalLanguageGrammar : Grammar
     {
-        public CustomGrammar()
+        public NaturalLanguageGrammar()
             : base(false)
         {
             //Terminals
@@ -38,9 +38,21 @@ namespace SearchLang
             var las = ToTerm("las");
             var el = ToTerm("el");
             var la = ToTerm("la");
+            var actualiza = ToTerm("actualiza");
+            var cambia = ToTerm("cambia");
+            var su = ToTerm("su");
+            var por = ToTerm ("por");
+            var plus = ToTerm("+");
+            var minus = ToTerm("-");
+            var mult = ToTerm("*");
+            var entre = ToTerm("entre");
+            var divided = ToTerm("/");
+            var cuanto = ToTerm("cuanto");
+            var es = ToTerm("es");
 
 
             var number = new NumberLiteral("number");
+            var number2 = new NumberLiteral("number2");
             var string_literal = new StringLiteral("string", "'", StringOptions.AllowsDoubledQuote);
 
             //non terminals
@@ -51,14 +63,18 @@ namespace SearchLang
             var cualMasMenosStatement = new NonTerminal("queMasMenosStatement");
             var muestraTodoStatement = new NonTerminal("muestraTodoStatement");
             var muestraUnoStatement = new NonTerminal("muestraUnoStatement");
+            var actualizaStatement = new NonTerminal("actualizaStatement");
+            var operacionesStatement = new NonTerminal("operacionesStatement");
 
             var tabla = new NonTerminal("tabla");
             var tabla2 = new NonTerminal("tabla2");
             
             var campo = new NonTerminal("campo");
+            var whereCampo = new NonTerminal("whereCampo");
             var id = new NonTerminal("id");
             var comando = new NonTerminal("comando");
             var whereId = new NonTerminal("whereId");
+            var valueSet = new NonTerminal("valueSet");
             var antesdespues = new NonTerminal("antesdespues");
             var cuantoscuantas = new NonTerminal("cuantoscuantas");
             var mayormenor = new NonTerminal("mayormenor");
@@ -67,7 +83,11 @@ namespace SearchLang
             var ella = new NonTerminal("ella");
             var loslas = new NonTerminal("loslas");
             var muestramuestrame = new NonTerminal("muestramuestrame");
-
+            var suma = new NonTerminal("suma");
+            var resta = new NonTerminal("resta");
+            var multiplicacion = new NonTerminal("multiplicacion");
+            var division = new NonTerminal("division");
+            
             var Id_simple = TerminalFactory.CreateSqlExtIdentifier(this, "id_simple"); //this covers normal identifiers (abc) and quoted id's ([abc d], "abc d")
             id.Rule = Id_simple;
             tabla.Rule = id;
@@ -81,7 +101,13 @@ namespace SearchLang
             loslas.Rule = los | las;
             muestramuestrame.Rule = muestra | muestrame;
             campo.Rule = id;
+            whereCampo.Rule = id;
             whereId.Rule = string_literal | number;
+            valueSet.Rule = string_literal | number;
+            suma.Rule = mas | plus;
+            resta.Rule = menos | minus;
+            multiplicacion.Rule = por | mult;
+            division.Rule = entre | divided;
             
             //Cuanto pregunta
             cuantosStatement.Rule = (cuantoscuantas + tabla + tiene + tabla2 + whereId) | (en + cuantoscuantas + tabla + esta + tabla2 + whereId);
@@ -101,7 +127,14 @@ namespace SearchLang
             //muestra uno pregunta
             muestraUnoStatement.Rule = muestramuestrame + ella + tabla + whereId;
 
-            comando.Rule = cuantosStatement | queStatement | cuandoStatement | cualMasMenosStatement | cualMayorMenorStatement | muestraTodoStatement | muestraUnoStatement;
+            //actualiza comando
+            actualizaStatement.Rule = actualiza + ella + tabla + whereCampo + cambia + su + campo + por + valueSet; 
+            
+            //operaciones matematicas
+            operacionesStatement.Rule = cuanto + es + number + (multiplicacion | suma | resta | division) + number2;
+
+
+            comando.Rule = cuantosStatement | queStatement | cuandoStatement | cualMasMenosStatement | cualMayorMenorStatement | muestraTodoStatement | muestraUnoStatement | actualizaStatement | operacionesStatement;
             this.Root = comando;
         }
 
@@ -128,6 +161,10 @@ namespace SearchLang
                         return MuestraTodo(node);
                     case "muestraUnoStatement":
                         return MuestraUno(node);
+                    case "actualizaStatement":
+                        return Actualiza(node);
+                    case "operacionesStatement":
+                        return OperacionMatematica(node);
                     default :
                         return new Tuple<string, string, Dictionary<string, object>>(string.Empty, string.Empty, new Dictionary<string, object>());
                 }
@@ -263,6 +300,47 @@ namespace SearchLang
                 new Dictionary<string, object> { { "param1", ConvertParamToProperType(where) } });
         }
 
+        private Tuple<string, string, Dictionary<string, object>> Actualiza(ParseTreeNode node)
+        {
+            //actualiza + ella + tabla + whereId + cambia + su + campo + por + valueSet
+            var campo = GetValueForTerm("campo", node);
+            var tabla = GetValueForTerm("tabla", node);
+            var where = GetValueForTerm("whereCampo", node);
+            var value = GetValueForTerm("valueSet", node);
+
+
+            return new Tuple<string, string, Dictionary<string, object>>
+                (string.Format("UPDATE {0} SET {1} = @param2 WHERE [default] = @param1;SELECT *  FROM {0} WHERE [default] = @param1", tabla, campo),
+                tabla,
+                new Dictionary<string, object> { { "param1", ConvertParamToProperType(where) }, { "param2", ConvertParamToProperType(value) } });
+        }
+
+
+        private Tuple<string, string, Dictionary<string, object>> OperacionMatematica(ParseTreeNode node)
+        {
+            //actualiza + ella + tabla + whereId + cambia + su + campo + por + valueSet
+            var numero1 = GetValueForTerm("number", node);
+            var numero2 = GetValueForTerm("number2", node);
+            var suma = GetValueForTerm("suma",node);
+            var resta = GetValueForTerm("resta", node);
+            var multiplicacion = GetValueForTerm("multiplicacion", node);
+            var division = GetValueForTerm("division", node);
+            string operacion = string.Empty;
+            if (!string.IsNullOrWhiteSpace(suma))
+                operacion = "+";
+            else if (!string.IsNullOrWhiteSpace(resta))
+                operacion = "-";
+            else if (!string.IsNullOrWhiteSpace(multiplicacion))
+                operacion = "*";
+            else
+                operacion = "/";
+
+            return new Tuple<string, string, Dictionary<string, object>>
+                (string.Format("Select {0} {1} {2} AS Resultado", numero1, operacion , numero2),
+                "",
+                new Dictionary<string, object> {  } );
+        }
+
         private object ConvertParamToProperType(string val)
         {
             //try conversions
@@ -292,6 +370,8 @@ namespace SearchLang
                 {
                     if (n.ChildNodes.Any())
                         val = GetValueForTerm(term, n);
+                    else if (n.Term.Name == term && n.Token.Value != null)
+                        val = n.Token.Value.ToString();
                     if (!string.IsNullOrWhiteSpace(val))
                         break;
                 }

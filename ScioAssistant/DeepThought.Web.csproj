@@ -175,7 +175,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\github.png" />
     <Content Include="Content\jarvis.mp3" />
-    <Content Include="Content\logo.jpg" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\SiriError.mp3" />
     <Content Include="Content\SiriFound.mp3" />
@@ -186,6 +185,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\deepthought.pubxml" />
     <None Include="Properties\PublishProfiles\FS.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

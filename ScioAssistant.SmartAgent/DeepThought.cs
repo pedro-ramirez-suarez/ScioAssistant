@@ -26,7 +26,7 @@ namespace DeepThought.SmartAgent
             query = query.Replace("!", "");
             query = query.Replace("¡", "");
 
-            var lang = new CustomGrammar();
+            var lang = new NaturalLanguageGrammar();
             ParseTree tree;
             Parser parser = new Parser(lang);
             tree = parser.Parse(query);
@@ -40,20 +40,20 @@ namespace DeepThought.SmartAgent
                 tree = parser.Parse(query);
                 if (tree.Root == null || tree.Root.ChildNodes[0] == null)
                 {
-                    return new List<object>() { new { error = "Lo siento, no puedo entenderte, intenta de nuevo" } };  //JsonConvert.SerializeObject(new List<object>() { new { error = "Lo siento, no puedo entenderte, intenta de nuevo" } });
+                    return new List<object>() { new { error = "Lo siento, no puedo entenderte, pero la respuesta a la pregunta última sobe la vida, el universo y todo es 42" } };  
                 }
             }
             try
             {
                 var execute = lang.QueryStatement(tree.Root.ChildNodes[0]);
                 var db = new CustomSearch.data.DataAccess("default");
-                var result = db.ExecuteSearch(execute.Item1, execute.Item2, execute.Item3);
+                var result = db.ExecuteQuery(execute.Item1, execute.Item2, execute.Item3);
                 //return the results as Json.Net string, we use Json.Net because expando objects are not serialized correcty by default serializator
                 return result; // JsonConvert.SerializeObject(result);
             }
             catch 
             {
-                return new List<object>() { new { error = "Lo siento, no puedo entenderte, intenta de nuevo" } };//JsonConvert.SerializeObject(new List<object>() { new { error = "Lo siento, no puedo entenderte, intenta de nuevo" } });
+                return new List<object>() { new { error = "Lo siento, no puedo entenderte, pero la respuesta a la pregunta última sobe la vida, el universo y todo es 42" } };  
             }
         }
     }

@@ -3,11 +3,11 @@
     ViewBag.Title = "Database";
 }
 
-<h4 style="margin-top:20px;margin-bottom:20px;">Corre el siguiente script(MSSQL 2008 R2) para crear la base de datos(dslDB) y llenarla con datos de prueba.</h4>
+<h4 style="margin-top:20px;margin-bottom:20px;">Crea una base de datos llamada "dslDB" y corre el siguiente script (MSSQL 2008 R2) para crear las tablas y llenarlas con datos de prueba.</h4>
 <div class="row">
 
     <div class="col-md-12">
-        <pre><code>--Crea una base de datos llamada "dslDB" y corre el siguiente script
+        <pre><code>
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
 EXEC [dslDB].[dbo].[sp_fulltext_database] @@action = 'enable'

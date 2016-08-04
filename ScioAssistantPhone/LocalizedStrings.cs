@@ -1,4 +1,4 @@
-﻿using DeepThoughtPhone.Resources;
+﻿using ScioAssistantPhone.Resources;
 
 namespace DeepThoughtPhone
 {

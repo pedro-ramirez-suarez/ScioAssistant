@@ -3,7 +3,7 @@
     ViewBag.Title = "Gramática";
 }
 
-<h2>Sintáxis</h2>
+<h2>Gramática</h2>
 <div class="row">
     <div class="col-md-12">
         <h3>El asistente puede contestar el siguiente tipo de preguntas:</h3>
@@ -22,15 +22,15 @@
                 <p><code>que capacidad tiene embarcacion morelos</code></p>
             </li>
             <li>
-                <p>Que (tabla) (campo) antes/despues de X, ejemplo:</p>
+                <p>Que (tabla) (campo) antes|despues de X, ejemplo:</p>
                 <p><code>que contrato empieza antes de '12/12/2015'</code></p>
             </li>
             <li>
-                <p>Cual (tabla) tiene mayor/menor (campo), ejemplo:</p>
+                <p>Cual (tabla) tiene mayor|menor (campo), ejemplo:</p>
                 <p><code>cual embarcacion tiene mayor velocidad</code></p>
             </li>
             <li>
-                <p>Cual (tabla) tiene mas/menos (tabla 2, soporta plural), ejemplo:</p>
+                <p>Cual (tabla) tiene mas|menos (tabla 2, soporta plural), ejemplo:</p>
                 <p><code>cual contrato tiene menos embarcaciones</code></p>
             </li>
             <li>
@@ -38,12 +38,21 @@
                 <p><code>cuando empieza contrato ABCDE</code></p>
             </li>
             <li>
-                <p>Muestra todas las/los (tabla, soporta plural), ejemplo:</p>
+                <p>Muestra todas las|los (tabla, soporta plural), ejemplo:</p>
                 <p><code>muestra todas las embarcaciones</code></p>
             </li>
             <li>
-                <p>Muestra el/la (tabla) X, ejemplo:</p>
+                <p>Muestra el|la (tabla) X, ejemplo:</p>
                 <p><code>muestra el contrato ABCDE</code></p>
+            </li>
+            <li>
+                <p>Actualiza el|la (tabla) (identificador) cambia su (campo) por (valor), ejemplo:</p>
+                <p><code>Actualiza la embarcacion pinta cambia su velocidad por 20</code></p>
+            </li>
+            <li>
+                <p>Cuanto es (numero) (mas|+|menos|-|entre|/|por|*) (numero 2), ejemplo:</p>
+                <p><code>Cuanto es 2 + 2</code></p>
+                <p><code>Cuanto es 2 entre 2</code></p>
             </li>
 
         </ul>

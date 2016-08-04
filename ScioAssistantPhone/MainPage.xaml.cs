@@ -9,11 +9,11 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Windows.Phone.Speech.Recognition;
 using Windows.Phone.Speech.Synthesis;
-using DeepThoughtPhone.Resources;
 using DeepThoughtPhone.Serializer;
 using RestSharp;
 using Newtonsoft.Json;
 using System.Windows.Media;
+using ScioAssistantPhone.Resources;
 
 namespace DeepThoughtPhone
 {

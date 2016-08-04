@@ -23,9 +23,10 @@ namespace CustomSearch.data
             Tables.Add("contrato","Numero" );
             Tables.Add("embarcacion", "nombre" );
             Tables.Add("contratoembarcacion", "Id" );
+            Tables.Add("", "");
         }
 
-        public List<dynamic> ExecuteSearch(string command, string tableName, Dictionary<string,object> pars)
+        public List<dynamic> ExecuteQuery(string command, string tableName, Dictionary<string,object> pars)
         {
             var result = new List<dynamic>();
             //replace the tag with the default field for each table
@@ -52,7 +53,7 @@ namespace CustomSearch.data
                             for (var x = 0; x < reader.FieldCount; x++)
                                 fields.Add(reader.GetName(x));
                         }
-                        var newItem = new ExpandoObject();
+                        var newItem = new ExpandoObject(); //we use expando object because how are serialized by json .net
                         result.Add(newItem);
                         var item = newItem as IDictionary<string, object>;
                         foreach (var f in fields)

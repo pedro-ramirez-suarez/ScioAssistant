@@ -126,7 +126,7 @@
     <comment>Controls the Language and ensures that the font for all elements in the RootFrame aligns with the app's language. Set to the language code of this resource file's language.</comment>
   </data>
   <data name="ApplicationTitle" xml:space="preserve">
-    <value>MY APPLICATION</value>
+    <value>Deep Thought</value>
   </data>
   <data name="AppBarButtonText" xml:space="preserve">
     <value>add</value>
@@ -135,7 +135,7 @@
     <value>Menu Item</value>
   </data>
   <data name="DeepThoughtRoot" xml:space="preserve">
-    <value>http://DeepThought.cloudapp.net</value>
+    <value>http://deepthoughtagent.azurewebsites.net</value>
   </data>
   <data name="DeepThoughtSearch" xml:space="preserve">
     <value>home/searchforphone?query=</value>
