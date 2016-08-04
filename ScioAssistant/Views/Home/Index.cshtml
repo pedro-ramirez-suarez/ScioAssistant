@@ -8,119 +8,118 @@
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
-        
 
-            <div class="form-group">
-                <input type="text" id="query" class="form-control" style="max-width:350px!important;"  onkeyup="ifEnterSearch(event)" autofocus>
 
-        
-            </div>
+        <div class="form-group">
+            <input type="text" id="query" class="form-control" style="max-width:350px!important;" onkeyup="ifEnterSearch(event)" autofocus>
+
+
+        </div>
     </div>
     <div class="col-md-2">
         <a class="btn btn-success startSpeak" href="javascript:void(0);" onclick="goSearch()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
     </div>
-    
+
 </div>
 
 <div class="row" id="results">
 </div>
 
-    <script>
-        var siriStart = new Audio('@Url.Content("~/Content/SiriStart.mp3")');
-        var siriFound = new Audio('@Url.Content("~/Content/SiriFound.mp3")');
-        var siriError = new Audio('@Url.Content("~/Content/siriError.mp3")');
+<script>
+    var siriStart = new Audio('@Url.Content("~/Content/SiriStart.mp3")');
+    var siriFound = new Audio('@Url.Content("~/Content/SiriFound.mp3")');
+    var siriError = new Audio('@Url.Content("~/Content/siriError.mp3")');
 
-        var recognition;
-        var final_transcript;
-        var searchUrl = '@Url.Action("Search","Home")';
+    var recognition;
+    var final_transcript;
+    var searchUrl = '@Url.Action("Search","Home")';
 
-        function startSpeak() {
-            if ($('#micro').hasClass('recording')) {
-                stopSpeak();
-                return;
-            }
-            siriStart.load();
-            siriStart.play();
-
-            $('#query').val('');
-            $('#micro').addClass('recording');
-            final_transcript = '';
-            recognition = new webkitSpeechRecognition();
-            recognition.lang = "es-MX";
-            recognition.continuous = true;
-            recognition.interimResults = true;
-            recognition.onresult = function (event) {
-                var interim_transcript = '';
-                for (var i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        final_transcript += event.results[i][0].transcript;
-                    } else {
-                        if (event.results[i][0].transcript != '')
-                            interim_transcript += event.results[i][0].transcript;
-                    }
-                }
-                if (interim_transcript != '') {
-                    $('#query').val(interim_transcript);
-                    if ($.trim(final_transcript) != $.trim(interim_transcript))
-                        final_transcript = interim_transcript;
-                }
-            }
-            recognition.start();
-            $('.startSpeak').hide();
+    function startSpeak() {
+        if ($('#micro').hasClass('recording')) {
+            stopSpeak();
+            return;
         }
+        siriStart.load();
+        siriStart.play();
 
-        function stopSpeak() {
-            $('#query').val(final_transcript);
-            $('#micro').removeClass('recording');
-            $('.startSpeak').show();
+        $('#query').val('');
+        $('#micro').addClass('recording');
+        final_transcript = '';
+        recognition = new webkitSpeechRecognition();
+        recognition.lang = "es-MX";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.onresult = function (event) {
+            var interim_transcript = '';
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    final_transcript += event.results[i][0].transcript;
+                } else {
+                    if (event.results[i][0].transcript != '')
+                        interim_transcript += event.results[i][0].transcript;
+                }
+            }
+            if (interim_transcript != '') {
+                $('#query').val(interim_transcript);
+                if ($.trim(final_transcript) != $.trim(interim_transcript))
+                    final_transcript = interim_transcript;
+            }
+        }
+        recognition.start();
+        $('.startSpeak').hide();
+    }
+
+    function stopSpeak() {
+        $('#query').val(final_transcript);
+        $('#micro').removeClass('recording');
+        $('.startSpeak').show();
+        goSearch();
+    }
+
+    function ifEnterSearch(event) {
+        if (event.keyCode == 13)
             goSearch();
-        }
+    }
+    function goSearch() {
 
-        function ifEnterSearch(event) {
-            if (event.keyCode == 13)
-                goSearch();
-        }
-        function goSearch() {
-            
-            $.post(
-                searchUrl,
-                { query: $('#query').val() },
-                function (result) {
-                    var jsonData = JSON.parse(result);
-                    $('#results').html('');
-                    $('#results').hide('fast');
-                    $('#results').append('<h2>Esto es lo que encontré</h2>');
-                    var item = '';
-                    if (jsonData.length == 0)
-                    {
-                        siriError.load();
-                        siriError.play();
-                        $('#results').append('<h2><label class="label label-info">La búsqueda no produjo resultados</label><h2>');
-                        $('#results').show('slow');
-                        return;
-                    } else if (jsonData[0].error != undefined && jsonData[0].error != null) {
-                        siriError.load();
-                        siriError.play();
-                        $('#results').append('<h1><label class="label label-danger">' + jsonData[0].error + '</label><h1>');
-                        $('#results').show('slow');
-                        return;
-                    }
-                    siriFound.load();
-                    siriFound.play();
-                    for (var x in jsonData) {
-                        var i = jsonData[x];
-                        var names = Object.keys(i)
-                        item = '<div class="col-md-3"><div class="well">';
-                        for (var j in names) {
-                            if (names[j] == 'ID' || names[j] == 'id' || names[j] == 'Id')
-                                continue;
-                            item += '<p><h4 class="label label-default fieldName">' + names[j] + '</h4> ' + i[names[j]] + '</p>';
-                        }
-                        item += '</div></div>';
-                        $('#results').append(item);
-                    }
+        $.post(
+            searchUrl,
+            { query: $('#query').val() },
+            function (result) {
+                var jsonData = JSON.parse(result);
+                $('#results').html('');
+                $('#results').hide('fast');
+                $('#results').append('<h2>Esto es lo que encontré</h2>');
+                var item = '';
+                if (jsonData.length == 0) {
+                    siriError.load();
+                    siriError.play();
+                    $('#results').append('<h2><label class="label label-info" style="white-space:normal!important">La búsqueda no produjo resultados, pero la respuesta a la pregunta última sobe la vida, el universo y todo es 42</label><h2>');
                     $('#results').show('slow');
-                });
-        }
+                    return;
+                } else if (jsonData[0].error != undefined && jsonData[0].error != null) {
+                    siriError.load();
+                    siriError.play();
+                    $('#results').append('<h1><label class="label label-danger" style="white-space:normal!important">' + jsonData[0].error + '</label><h1>');
+                    $('#results').show('slow');
+                    return;
+                }
+                siriFound.load();
+                siriFound.play();
+                for (var x in jsonData) {
+                    var i = jsonData[x];
+                    var names = Object.keys(i)
+                    item = '<div class="col-md-3"><div class="well">';
+                    for (var j in names) {
+                        if (names[j] == 'ID' || names[j] == 'id' || names[j] == 'Id')
+                            continue;
+                        item += '<p><h4 class="label label-default fieldName">' + names[j] + '</h4> ' + i[names[j]] + '</p>';
+                    }
+                    item += '</div></div>';
+                    $('#results').append(item);
+                }
+                $('#results').show('slow');
+            });
+    }
 
-    </script>
+</script>
