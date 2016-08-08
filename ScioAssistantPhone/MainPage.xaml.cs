@@ -58,13 +58,11 @@ namespace DeepThoughtPhone
         public  void  LaunchSearch()
         {
             results.Children.Clear();
-            //Hard coded...I know...it's temporary
             var client = new RestClient(AppResources.DeepThoughtRoot);
             client.AddHandler("application/json", new DynamicSerializer());
-            //Hard coded...I know...it's temporary
+            
             client.ExecuteAsync<dynamic>(new RestRequest(AppResources.DeepThoughtSearch + txtPregunta.Text), (res) =>
             {
-                //MessageBox.Show("result " + res.Content);
                 var data = JsonConvert.DeserializeObject<dynamic>(res.Content);
                 SpeechSynthesizer synth = new SpeechSynthesizer();
                 VoiceInformation spvoice;                

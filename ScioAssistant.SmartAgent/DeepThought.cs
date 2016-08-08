@@ -49,7 +49,7 @@ namespace DeepThought.SmartAgent
                 var db = new CustomSearch.data.DataAccess("default");
                 var result = db.ExecuteQuery(execute.Item1, execute.Item2, execute.Item3);
                 //return the results as Json.Net string, we use Json.Net because expando objects are not serialized correcty by default serializator
-                return result; // JsonConvert.SerializeObject(result);
+                return result; 
             }
             catch 
             {
